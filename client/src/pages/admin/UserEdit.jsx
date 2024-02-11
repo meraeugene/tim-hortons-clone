@@ -58,7 +58,7 @@ const UserEdit = () => {
   };
 
   return (
-    <div className="p-20 pt-14">
+    <div className="md:p-20 md:pt-14 p-4">
       <Link
         to="/admin/userlist"
         className="flex  w-[100px]  items-center gap-1 border border-[#d2d2d7] bg-white p-2 text-sm transition duration-300 ease-in-out hover:bg-[#121212] hover:text-white"
@@ -66,12 +66,12 @@ const UserEdit = () => {
         <IoCaretBackOutline />
         Go Back
       </Link>
-      <div className="flex flex-col items-center justify-center  ">
+      <div className="flex flex-col md:items-center justify-center  ">
         <h1 className="mb-10 mt-8 text-4xl font-extrabold uppercase">
           Update User
         </h1>
 
-        <form className=" w-1/2" onSubmit={submitHandler}>
+        <form className=" lg:w-1/2 w-full" onSubmit={submitHandler}>
           <p className="mb-2 text-base font-medium">First Name : </p>
           <input
             type="text"

@@ -1,4 +1,4 @@
-import {GoogleAuthProvider, getAuth, signInWithPopup} from "firebase/auth"
+import {GoogleAuthProvider, getAuth, signInWithRedirect} from "firebase/auth"
 import {toast} from "react-toastify"
 import { app } from "../firebase"
 import {  useLoginGoogleAuthMutation } from "../slices/usersApiSlice";
@@ -19,7 +19,7 @@ const AuthComponent = () => {
       const provider = new GoogleAuthProvider()
       const auth = getAuth(app)
 
-      const result = await signInWithPopup(auth,provider)
+      const result = await signInWithRedirect(auth,provider)
 
       const data = await loginGoogleAuth({
         firstName: result._tokenResponse.firstName,

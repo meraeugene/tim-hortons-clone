@@ -420,87 +420,79 @@ const Header = () => {
               )}
             </li>
 
-            <li className="border-b border-[#d2d2d7] p-6 text-xl font-semibold">
+         
               <Link
                 to="/"
-                className="flex items-center gap-2 text-xl font-semibold "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6 "
                 onClick={toggleNav}
               >
                 <BsShop />
                 Shop
               </Link>
-            </li>
-            <li className="border-b border-[#d2d2d7] p-6">
+            
               <Link
                 to="/service"
-                className="flex items-center gap-2 text-xl font-semibold "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6 "
                 onClick={toggleNav}
               >
                 <RiCustomerService2Line />
                 Service
               </Link>
-            </li>
-            <li className="border-b border-[#d2d2d7] p-6">
+         
+           
               <Link
                 to="/contact"
-                className="flex items-center gap-2 text-xl font-semibold "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6"
                 onClick={toggleNav}
               >
                 <GrContact />
                 Contact
               </Link>
-            </li>
-            <li className="border-b border-[#d2d2d7] p-6">
+            
               <Link
                 to="/about"
-                className="flex items-center gap-2 text-xl font-semibold "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6"
                 onClick={toggleNav}
               >
                 <BsQuestionSquare />
                 About Us
               </Link>
-            </li>
-            <li className="border-b border-[#d2d2d7] p-6">
+           
+        
               <Link
                 to="/shippings&returns"
-                className="flex items-center gap-2 text-xl font-semibold "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6"
                 onClick={toggleNav}
               >
                 <LiaShippingFastSolid />
                 Shippings & Returns
               </Link>
-            </li>
-            <li className="border-b border-[#d2d2d7] p-6">
+          
               <Link
                 to="/terms&conditions"
-                className="flex items-center gap-2 text-xl font-semibold "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6"
                 onClick={toggleNav}
               >
                 <RiNewspaperLine />
                 Term & Conditions
               </Link>
-            </li>
-            <li className="border-b border-[#d2d2d7] p-6">
+          
               <Link
                 to="privacypolicy"
-                className="flex items-center gap-2 text-xl font-semibold "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6 "
                 onClick={toggleNav}
               >
                 <MdOutlinePrivacyTip />
                 Privacy Policy
               </Link>
-            </li>
             {userInfo && (
-              <li className="border-b border-[#d2d2d7] p-6">
-                <Link
-                  to="/"
-                  className="flex items-center gap-2 text-xl font-semibold "
-                  onClick={logoutHandler}
-                >
+              <Link                   onClick={logoutHandler}
+              to="/" className="border-b border-[#d2d2d7] p-6 flex items-center gap-2 text-xl font-semibold">
+               
                   <BiLogOutCircle />
                   Logout
-                </Link>
-              </li>
+              
+              </Link>
             )}
 
             <li className="flex items-center justify-between border-b border-[#d2d2d7] p-6">
@@ -514,7 +506,7 @@ const Header = () => {
 
           <span className="mb-4 mt-4 flex items-center justify-center font-bold">
             {" "}
-            © Serene Stems LuxBouquets {currentYear}
+            © Tim Hortons {currentYear}
           </span>
         </div>
       )}

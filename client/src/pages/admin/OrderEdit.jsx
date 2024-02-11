@@ -78,7 +78,7 @@ const OrderEdit = () => {
       message={error?.data?.error || error.error || error?.data?.message}
     />
   ) : (
-    <div className="p-20 pt-14">
+    <div className="p-4 md:p-20 md:pt-14">
       <Link
         to="/admin/orderlist"
         className="flex  w-[100px]  items-center gap-1 border border-[#d2d2d7] bg-white p-2 text-sm transition duration-300 ease-in-out hover:bg-[#121212] hover:text-white"
@@ -86,7 +86,7 @@ const OrderEdit = () => {
         <IoCaretBackOutline />
         Go Back
       </Link>
-      <div className="mx-auto flex w-1/2 flex-col items-center  justify-center ">
+      <div className="mx-auto flex w-full lg:w-1/2 flex-col items-start  md:items-center  justify-center ">
         <h1 className="mb-10 mt-8  text-4xl font-extrabold uppercase">
           Update Order
         </h1>
