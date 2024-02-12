@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import { FiFacebook, FiInstagram, FiTwitter } from "react-icons/fi";
 import { ImPinterest2 } from "react-icons/im";
 import { LiaTelegram } from "react-icons/lia";

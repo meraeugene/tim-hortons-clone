@@ -58,7 +58,7 @@ const UserEdit = () => {
   };
 
   return (
-    <div className="md:p-20 md:pt-14 p-4">
+    <div className="p-4 md:p-20 py-14">
       <Link
         to="/admin/userlist"
         className="flex  w-[100px]  items-center gap-1 border border-[#d2d2d7] bg-white p-2 text-sm transition duration-300 ease-in-out hover:bg-[#121212] hover:text-white"

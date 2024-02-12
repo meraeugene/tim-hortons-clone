@@ -141,6 +141,9 @@ const getProductById = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Create a product
+// @route POST /api/products
+// @access Private/Admin
 const createProduct = asyncHandler(async (req, res) => {
   try {
     const {
@@ -259,7 +262,7 @@ const updateProduct = asyncHandler(async (req, res) => {
       data: updatedProduct,
     });
   } catch (error) {
-    res.status(500).json(error);
+    res.status(500).json({ message: error }); // Changed status code to 500 for server error
   }
 });
 
@@ -267,13 +270,17 @@ const updateProduct = asyncHandler(async (req, res) => {
 // @route DELETE /api/products/:id
 // @access Private/Admin
 const deleteProduct = asyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
+  try {
+    const product = await Product.findById(req.params.id);
 
-  if (product) {
-    await Product.deleteOne({ _id: req.params.id });
-    res.status(200).json({ message: "Product  deleted successfully" });
-  } else {
-    res.status(404).json({ message: "Product not found" });
+    if (product) {
+      await Product.deleteOne({ _id: req.params.id });
+      res.status(200).json({ message: "Product  deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Product not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error }); // Changed status code to 500 for server error
   }
 });
 
@@ -281,60 +288,65 @@ const deleteProduct = asyncHandler(async (req, res) => {
 // @route POST /api/products/:id/reviews
 // @access Private
 const createProductReview = asyncHandler(async (req, res) => {
-  const { rating, comment } = req.body;
+  try {
+    const { rating, comment } = req.body;
 
-  if (!rating && !comment) {
-    res.status(404).json({ message: "Please submit required fields." });
-    return;
-  }
-
-  if (!rating) {
-    res.status(404).json({ message: "Please submit a rating." });
-    return;
-  }
-
-  if (!comment) {
-    res.status(404).json({ message: "Please submit a comment." });
-    return;
-  }
-
-  const product = await Product.findById(req.params.id);
-
-  if (product) {
-    const alreadyReviewed = product.reviews.find(
-      (review) => review.user.toString() === req.userCredentials._id.toString()
-    );
-
-    if (alreadyReviewed) {
-      res
-        .status(400)
-        .json({ message: "Sorry but you can only review a product once." });
+    if (!rating && !comment) {
+      res.status(404).json({ message: "Please submit required fields." });
       return;
     }
 
-    const review = {
-      firstName: req.userCredentials.firstName,
-      lastName: req.userCredentials.lastName,
-      email: req.userCredentials.email,
-      rating: Number(rating),
-      image: req.userCredentials.image,
-      comment,
-      user: req.userCredentials._id,
-    };
+    if (!rating) {
+      res.status(404).json({ message: "Please submit a rating." });
+      return;
+    }
 
-    product.reviews.push(review);
+    if (!comment) {
+      res.status(404).json({ message: "Please submit a comment." });
+      return;
+    }
 
-    product.numReviews = product.reviews.length;
+    const product = await Product.findById(req.params.id);
 
-    product.rating = product.reviews.reduce(
-      (acc, review) => acc + review.rating,
-      0 / product.reviews.length
-    );
+    if (product) {
+      const alreadyReviewed = product.reviews.find(
+        (review) =>
+          review.user.toString() === req.userCredentials._id.toString()
+      );
 
-    await product.save();
-    res.status(201).json({ message: "Review added" });
-  } else {
-    res.status(400).json({ message: "Resource not found" });
+      if (alreadyReviewed) {
+        res
+          .status(400)
+          .json({ message: "Sorry but you can only review a product once." });
+        return;
+      }
+
+      const review = {
+        firstName: req.userCredentials.firstName,
+        lastName: req.userCredentials.lastName,
+        email: req.userCredentials.email,
+        rating: Number(rating),
+        image: req.userCredentials.image,
+        comment,
+        user: req.userCredentials._id,
+      };
+
+      product.reviews.push(review);
+
+      product.numReviews = product.reviews.length;
+
+      product.rating = product.reviews.reduce(
+        (acc, review) => acc + review.rating,
+        0 / product.reviews.length
+      );
+
+      await product.save();
+      res.status(201).json({ message: "Review added" });
+    } else {
+      res.status(400).json({ message: "Resource not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error }); // Changed status code to 500 for server error
   }
 });
 

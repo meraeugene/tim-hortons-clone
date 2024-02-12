@@ -1,4 +1,3 @@
-import React from "react";
 import { useState, useEffect } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -78,7 +77,7 @@ const OrderEdit = () => {
       message={error?.data?.error || error.error || error?.data?.message}
     />
   ) : (
-    <div className="p-4 md:p-20 md:pt-14">
+    <div className="p-4 md:p-20 py-14">
       <Link
         to="/admin/orderlist"
         className="flex  w-[100px]  items-center gap-1 border border-[#d2d2d7] bg-white p-2 text-sm transition duration-300 ease-in-out hover:bg-[#121212] hover:text-white"

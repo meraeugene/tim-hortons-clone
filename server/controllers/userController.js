@@ -291,14 +291,14 @@ const resendOTPVerificationCode = asyncHandler(async (req, res) => {
 const logoutUser = asyncHandler(async (req, res) => {
   try {
     // Clear the JWT cookie
-    // res.cookie("jwt", "", {
-    //   httpOnly: true,
-    //   expires: new Date(0),
-    // });
+    res.cookie("jwt", "", {
+      httpOnly: true,
+      expires: new Date(0),
+    });
 
     // // Clear the connect.sid cookie
     // res.clearCookie("connect.sid");
-    res.clearCookie("jwt");
+    // res.clearCookie("jwt");
     // Respond with a 200 OK status and a success message
     res.status(200).json({ message: "Log out successfully" });
   } catch (error) {
@@ -409,6 +409,9 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc Update user password
+// @route PUT /api/users/resetPassword
+// @access Private
 const resetPassword = asyncHandler(async (req, res) => {
   const { currentPassword, newPassword } = req.body;
 
@@ -464,8 +467,6 @@ const resetPassword = asyncHandler(async (req, res) => {
   }
 });
 
-// ADMIN ROUTES
-
 // @desc Get  users
 // @route PUT /api/users
 // @access Private/Admin
@@ -505,14 +506,18 @@ const getUsers = asyncHandler(async (req, res) => {
 // @route GET /api/users/:id
 // @access Private/Admin
 const getUserById = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id).select("-password");
+  try {
+    const user = await User.findById(req.params.id).select("-password");
 
-  if (user) {
-    res.status(200).json(user);
-  } else {
-    res.status(404).json({
-      message: "User not found",
-    });
+    if (user) {
+      res.status(200).json(user);
+    } else {
+      res.status(404).json({
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
 });
 
@@ -520,21 +525,25 @@ const getUserById = asyncHandler(async (req, res) => {
 // @route DELETE /api/users/:id
 // @access Private/Admin
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  try {
+    const user = await User.findById(req.params.id);
 
-  if (user) {
-    if (user.isAdmin) {
-      res.status(404).json({
-        message: "Cannot delete admin user",
-      });
+    if (user) {
+      if (user.isAdmin) {
+        res.status(404).json({
+          message: "Cannot delete admin user",
+        });
+      } else {
+        await User.deleteOne({ _id: user._id });
+        res.status(200).json({ message: "User deleted successfully" });
+      }
     } else {
-      await User.deleteOne({ _id: user._id });
-      res.status(200).json({ message: "User deleted successfully" });
+      res.status(404).json({
+        message: "User not found",
+      });
     }
-  } else {
-    res.status(404).json({
-      message: "User not found",
-    });
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
 });
 
@@ -542,31 +551,35 @@ const deleteUser = asyncHandler(async (req, res) => {
 // @route PUT /api/users/:id
 // @access Private/Admin
 const updateUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  try {
+    const user = await User.findById(req.params.id);
 
-  if (user) {
-    user.firstName = req.body.firstName || user.firstName;
-    user.lastName = req.body.lastName || user.lastName;
-    user.email = req.body.email || user.email;
-    user.isAdmin = Boolean(req.body.isAdmin);
+    if (user) {
+      user.firstName = req.body.firstName || user.firstName;
+      user.lastName = req.body.lastName || user.lastName;
+      user.email = req.body.email || user.email;
+      user.isAdmin = Boolean(req.body.isAdmin);
 
-    const updatedUser = await user.save();
+      const updatedUser = await user.save();
 
-    res.status(200).json({
-      status: "SUCCESS",
-      data: {
-        _id: updatedUser._id,
-        firstName: updatedUser.firstName,
-        lastName: updatedUser.lastName,
-        email: updatedUser.email,
-        isAdmin: updatedUser.isAdmin,
-      },
-      message: "User updated successfully",
-    });
-  } else {
-    res.status(404).json({
-      message: "User not found",
-    });
+      res.status(200).json({
+        status: "SUCCESS",
+        data: {
+          _id: updatedUser._id,
+          firstName: updatedUser.firstName,
+          lastName: updatedUser.lastName,
+          email: updatedUser.email,
+          isAdmin: updatedUser.isAdmin,
+        },
+        message: "User updated successfully",
+      });
+    } else {
+      res.status(404).json({
+        message: "User not found",
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
 });
 

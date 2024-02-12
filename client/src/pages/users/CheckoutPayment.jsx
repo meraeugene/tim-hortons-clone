@@ -156,7 +156,7 @@ const CheckoutPayment = () => {
                 </h1>
               </div>
             </div>
-            <div className="total__container flex flex-1  items-center justify-between bg-[#FAEED1] px-4 py-3 lg:px-0   ">
+            <div className="total__container flex flex-1  items-center justify-between  px-4 py-3 lg:px-0   ">
               <h1 className="text-base font-normal md:text-lg lg:text-xl">
                 Total Payment
               </h1>

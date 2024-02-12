@@ -2,7 +2,7 @@ import asyncHandler from "../middleware/asyncHandler.js";
 import User from "../models/userModel.js";
 import generateJWTToken from "../utils/generateJWTToken.js";
 
-// @desc Create a contact
+// @desc Post data from firebase auth
 // @route POST /api/auth/google
 // @access Public
 const createGoogleAuth = asyncHandler(async (req, res) => {

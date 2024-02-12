@@ -327,7 +327,7 @@ const Header = () => {
       </div>
       {navState && (
         <div className="nav__mobile fixed   left-0 top-0 z-30 h-screen w-full  overflow-y-scroll bg-white  md:h-full md:w-[50%] md:border-r md:border-[#d2d2d7] ">
-          <div className="border-b border-[#d2d2d7] p-[14px] ">
+          <div className="border-b border-[#d2d2d7] p-2 ">
             <button onClick={toggleNav}>
               <IoMdClose size={35} color="#121212" />
             </button>
@@ -338,7 +338,7 @@ const Header = () => {
             >
               {userInfo ? (
                 <div>
-                  <div className="flex items-center gap-3 border-b border-[#d2d2d7] p-6 text-xl font-semibold">
+                  <div className="flex items-center gap-3 border-b border-[#d2d2d7] py-6 px-2 text-xl font-semibold">
                    
                       <img
                         src={userInfo.data.image}
@@ -356,7 +356,7 @@ const Header = () => {
 
                   <div
                     onClick={toggleNav}
-                    className="flex items-center gap-2 border-b border-[#d2d2d7] p-6 text-xl font-semibold"
+                    className="flex items-center gap-2 border-b border-[#d2d2d7] py-6 px-3 text-xl font-semibold"
                   >
                     <LiaUserEditSolid />
                     <Link to="/profile">Profile</Link>
@@ -366,7 +366,7 @@ const Header = () => {
                     <>
                       <div
                         onClick={toggleNav}
-                        className="flex items-center gap-2 border-b border-[#d2d2d7] p-6 text-xl font-semibold"
+                        className="flex items-center gap-2 border-b border-[#d2d2d7] py-6 px-3 text-xl font-semibold"
                       >
                         <MdOutlineAdminPanelSettings />
 
@@ -374,7 +374,7 @@ const Header = () => {
                       </div>
                       <div
                         onClick={toggleNav}
-                        className="flex items-center gap-2 border-b border-[#d2d2d7] p-6 text-xl font-semibold"
+                        className="flex items-center gap-2 border-b border-[#d2d2d7] py-6 px-3 text-xl font-semibold"
                       >
                         <MdOutlineAdminPanelSettings />
 
@@ -383,7 +383,7 @@ const Header = () => {
 
                       <div
                         onClick={toggleNav}
-                        className="flex items-center gap-2 border-b border-[#d2d2d7] p-6 text-xl font-semibold"
+                        className="flex items-center gap-2 border-b border-[#d2d2d7] py-6 px-3 text-xl font-semibold"
                       >
                         {" "}
                         <MdOutlineAdminPanelSettings />
@@ -391,7 +391,7 @@ const Header = () => {
                       </div>
                       <div
                         onClick={toggleNav}
-                        className="flex items-center gap-2 border-b border-[#d2d2d7] p-6 text-xl font-semibold"
+                        className="flex items-center gap-2 border-b border-[#d2d2d7] py-6 px-3 text-xl font-semibold"
                       >
                         {" "}
                         <MdOutlineAdminPanelSettings />
@@ -399,7 +399,7 @@ const Header = () => {
                       </div>
                       <div
                         onClick={toggleNav}
-                        className="flex items-center gap-2 border-b border-[#d2d2d7] p-6 text-xl font-semibold"
+                        className="flex items-center gap-2 border-b border-[#d2d2d7] py-6 px-3 text-xl font-semibold"
                       >
                         <MdOutlineAdminPanelSettings />
 
@@ -423,7 +423,7 @@ const Header = () => {
          
               <Link
                 to="/"
-                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6 "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] py-6 px-3 "
                 onClick={toggleNav}
               >
                 <BsShop />
@@ -432,7 +432,7 @@ const Header = () => {
             
               <Link
                 to="/service"
-                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6 "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] py-6 px-3 "
                 onClick={toggleNav}
               >
                 <RiCustomerService2Line />
@@ -442,7 +442,7 @@ const Header = () => {
            
               <Link
                 to="/contact"
-                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6"
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] py-6 px-3"
                 onClick={toggleNav}
               >
                 <GrContact />
@@ -451,7 +451,7 @@ const Header = () => {
             
               <Link
                 to="/about"
-                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6"
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] py-6 px-3"
                 onClick={toggleNav}
               >
                 <BsQuestionSquare />
@@ -461,7 +461,7 @@ const Header = () => {
         
               <Link
                 to="/shippings&returns"
-                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6"
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] py-6 px-3"
                 onClick={toggleNav}
               >
                 <LiaShippingFastSolid />
@@ -470,7 +470,7 @@ const Header = () => {
           
               <Link
                 to="/terms&conditions"
-                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6"
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] py-6 px-3"
                 onClick={toggleNav}
               >
                 <RiNewspaperLine />
@@ -479,7 +479,7 @@ const Header = () => {
           
               <Link
                 to="privacypolicy"
-                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] p-6 "
+                className="flex items-center gap-2 text-xl font-semibold border-b border-[#d2d2d7] py-6 px-3 "
                 onClick={toggleNav}
               >
                 <MdOutlinePrivacyTip />
@@ -487,7 +487,7 @@ const Header = () => {
               </Link>
             {userInfo && (
               <Link                   onClick={logoutHandler}
-              to="/" className="border-b border-[#d2d2d7] p-6 flex items-center gap-2 text-xl font-semibold">
+              to="/" className="border-b border-[#d2d2d7] py-6 px-3 flex items-center gap-2 text-xl font-semibold">
                
                   <BiLogOutCircle />
                   Logout

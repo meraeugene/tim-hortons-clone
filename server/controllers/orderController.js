@@ -69,15 +69,19 @@ const getMyOrders = asyncHandler(async (req, res) => {
 // @route GET /api/orders/:id
 // @access Private
 const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    "user",
-    "firstName lastName email"
-  );
+  try {
+    const order = await Order.findById(req.params.id).populate(
+      "user",
+      "firstName lastName email"
+    );
 
-  if (order) {
-    res.status(200).json(order);
-  } else {
-    res.status(404).json({ message: "Order not found" });
+    if (order) {
+      res.status(200).json(order);
+    } else {
+      res.status(404).json({ message: "Order not found" });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
 });
 
@@ -85,51 +89,55 @@ const getOrderById = asyncHandler(async (req, res) => {
 // @route POST /api/orders
 // @access Private
 const addOrderItems = asyncHandler(async (req, res) => {
-  const { orderItems, shippingInformation, paymentMethod } = req.body;
+  try {
+    const { orderItems, shippingInformation, paymentMethod } = req.body;
 
-  if (orderItems && orderItems.length === 0) {
-    res.status(400).json({ message: "No order items" });
-  } else {
-    // get the ordered items from our database
-    const itemsFromDB = await Product.find({
-      _id: { $in: orderItems.map((x) => x._id) },
-    });
+    if (orderItems && orderItems.length === 0) {
+      res.status(400).json({ message: "No order items" });
+    } else {
+      // get the ordered items from our database
+      const itemsFromDB = await Product.find({
+        _id: { $in: orderItems.map((x) => x._id) },
+      });
 
-    // map over the order items and use the price from our items from database
-    const dbOrderItems = orderItems.map((itemFromClient) => {
-      const matchingItemFromDB = itemsFromDB.find(
-        (itemFromDB) => itemFromDB._id.toString() === itemFromClient._id
-      );
-      return {
-        ...itemFromClient,
-        product: itemFromClient._id,
-        price: matchingItemFromDB.prices[itemFromClient.size],
-        _id: undefined,
-      };
-    });
+      // map over the order items and use the price from our items from database
+      const dbOrderItems = orderItems.map((itemFromClient) => {
+        const matchingItemFromDB = itemsFromDB.find(
+          (itemFromDB) => itemFromDB._id.toString() === itemFromClient._id
+        );
+        return {
+          ...itemFromClient,
+          product: itemFromClient._id,
+          price: matchingItemFromDB.prices[itemFromClient.size],
+          _id: undefined,
+        };
+      });
 
-    // calculate prices
-    const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
-      calcPrices(dbOrderItems);
+      // calculate prices
+      const { itemsPrice, taxPrice, shippingPrice, totalPrice } =
+        calcPrices(dbOrderItems);
 
-    const order = new Order({
-      orderItems: dbOrderItems,
-      user: req.userCredentials._id,
-      shippingInformation,
-      paymentMethod,
-      itemsPrice,
-      taxPrice,
-      shippingPrice,
-      totalPrice,
-    });
+      const order = new Order({
+        orderItems: dbOrderItems,
+        user: req.userCredentials._id,
+        shippingInformation,
+        paymentMethod,
+        itemsPrice,
+        taxPrice,
+        shippingPrice,
+        totalPrice,
+      });
 
-    const createdOrder = await order.save();
+      const createdOrder = await order.save();
 
-    res.status(200).json({
-      message:
-        "Product order placed successfully. Check your profile to view your orders.",
-      order: createdOrder,
-    });
+      res.status(200).json({
+        message:
+          "Product order placed successfully. Check your profile to view your orders.",
+        order: createdOrder,
+      });
+    }
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
 });
 
@@ -137,49 +145,56 @@ const addOrderItems = asyncHandler(async (req, res) => {
 // @route PUT /api/orders/:id/pay
 // @access Private
 const updateOrderToPaid = asyncHandler(async (req, res) => {
-  const { verified, value } = await verifyPayPalPayment(req.body.id);
-  if (!verified) throw new Error("Payment not verified");
+  try {
+    const { verified, value } = await verifyPayPalPayment(req.body.id);
+    if (!verified) throw new Error("Payment not verified");
 
-  // check if this transaction has been used before
-  const isNewTransaction = await checkIfNewTransaction(Order, req.body.id);
-  if (!isNewTransaction) throw new Error("Transaction has been used before");
+    // check if this transaction has been used before
+    const isNewTransaction = await checkIfNewTransaction(Order, req.body.id);
+    if (!isNewTransaction) throw new Error("Transaction has been used before");
 
-  const order = await Order.findById(req.params.id);
+    const order = await Order.findById(req.params.id);
 
-  if (order) {
-    if (order.paymentMethod === "PayPal") {
-      // check the correct amount was paid
-      const totalPriceRounded = order.totalPrice.toFixed(2); // Round totalPrice to 2 decimal places
-      const valueRounded = parseFloat(value).toFixed(2); // Parse value as float and round to 2 decimal places
+    if (order) {
+      if (order.paymentMethod === "PayPal") {
+        // check the correct amount was paid
+        const totalPriceRounded = order.totalPrice.toFixed(2); // Round totalPrice to 2 decimal places
+        const valueRounded = parseFloat(value).toFixed(2); // Parse value as float and round to 2 decimal places
 
-      const paidCorrectAmount = totalPriceRounded === valueRounded;
+        const paidCorrectAmount = totalPriceRounded === valueRounded;
 
-      if (!paidCorrectAmount) throw new Error("Incorrect amount paid");
+        if (!paidCorrectAmount) throw new Error("Incorrect amount paid");
 
-      order.isPaid = true;
-      order.paidAt = Date.now();
-      order.paymentResult = {
-        id: req.body.id,
-        status: req.body.status,
-        update_time: req.body.update_time,
-        email_address: req.body.payer.email_address,
-      };
+        order.isPaid = true;
+        order.paidAt = Date.now();
+        order.paymentResult = {
+          id: req.body.id,
+          status: req.body.status,
+          update_time: req.body.update_time,
+          email_address: req.body.payer.email_address,
+        };
 
-      const updatedOrder = await order.save();
+        const updatedOrder = await order.save();
 
-      res.status(200).json({
-        message: "Payment Successful",
-        data: updatedOrder,
-      });
+        res.status(200).json({
+          message: "Payment Successful",
+          data: updatedOrder,
+        });
+      } else {
+        // Handle other payment methods or provide appropriate response
+        res.status(400).json({ message: "Unsupported payment method" });
+      }
     } else {
-      // Handle other payment methods or provide appropriate response
-      res.status(400).json({ message: "Unsupported payment method" });
+      res.status(404).json({ message: "Order not found" });
     }
-  } else {
-    res.status(404).json({ message: "Order not found" });
+  } catch (error) {
+    res.status(500).json({ message: error });
   }
 });
 
+// @desc Update cod order to paid
+// @route PUT /api/orders/:id/cod/pay
+// @access Private/Admin
 const updateCodOrderToPaid = asyncHandler(async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
@@ -206,29 +221,33 @@ const updateCodOrderToPaid = asyncHandler(async (req, res) => {
 // @route PUT /api/orders/:id/status
 // @access Private/Admin
 const updateOrderStatus = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id);
+  try {
+    const order = await Order.findById(req.params.id);
 
-  if (order) {
-    // Validate the incoming status value against enum values
-    if (Order.schema.path("status").enumValues.includes(req.body.status)) {
-      const previousStatus = order.status;
-      order.status = req.body.status;
+    if (order) {
+      // Validate the incoming status value against enum values
+      if (Order.schema.path("status").enumValues.includes(req.body.status)) {
+        const previousStatus = order.status;
+        order.status = req.body.status;
 
-      if (req.body.status === "Delivered" && previousStatus !== "Delivered") {
-        // Update the deliveryDate only if the status is changing to "Delivered" and it wasn't already "Delivered"
-        order.deliveryDate = Date.now();
+        if (req.body.status === "Delivered" && previousStatus !== "Delivered") {
+          // Update the deliveryDate only if the status is changing to "Delivered" and it wasn't already "Delivered"
+          order.deliveryDate = Date.now();
+        }
+
+        const updatedOrder = await order.save();
+        res.status(200).json({
+          message: "Order updated successfully",
+          data: updatedOrder,
+        });
+      } else {
+        res.status(400).json({ message: "Invalid status value" });
       }
-
-      const updatedOrder = await order.save();
-      res.status(200).json({
-        message: "Order updated successfully",
-        data: updatedOrder,
-      });
     } else {
-      res.status(400).json({ message: "Invalid status value" });
+      res.status(404).json({ message: "Order not found" });
     }
-  } else {
-    res.status(404).json({ message: "Order not found" });
+  } catch (error) {
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
