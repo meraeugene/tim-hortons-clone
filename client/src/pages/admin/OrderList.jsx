@@ -23,7 +23,7 @@ const OrderList = () => {
   };
 
   return (
-    <div className="flex flex-col   px-4 py-10 md:flex-row  md:flex-wrap  md:p-8 lg:flex-col lg:px-20 lg:py-10">
+    <div className="flex flex-col   px-4 py-10 md:flex-row  md:flex-wrap  md:p-8 lg:flex-col lg:px:10 lg:py-10">
       {isLoading ? (
         <Loader />
       ) : error ? (
