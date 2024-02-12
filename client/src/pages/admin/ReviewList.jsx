@@ -77,7 +77,7 @@ const ReviewList = () => {
   };
 
   return (
-    <div className="flex flex-col px-4 py-10 md:flex-row md:flex-wrap md:p-8 lg:flex-col lg:py-20 lg:px-10">
+    <div className="flex flex-col px-4 py-10 md:flex-row md:flex-wrap md:p-8 lg:flex-col lg:py-20 lg:px-10 nigga">
       {isLoading ? (
         <Loader />
       ) : error ? (
