@@ -10,7 +10,7 @@ import Meta from "../components/Meta";
 const Home = () => {
   return (
     <div>
-      <Meta title="Tim Hortons | Always Fesh Coffee & Baked Goods" />
+      <Meta title="Tim Hortons | Always Fresh Coffee & Baked Goods" />
 
       <Hero />
       <About />
