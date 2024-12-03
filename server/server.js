@@ -12,7 +12,6 @@ import contactRoutes from "./routes/contactRoutes.js";
 import uploadRoutes from "./routes/uploadRoutes.js";
 import googleAuthRoutes from "./routes/googleAuthRoutes.js";
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
-// import job from "./cron/cron.js";
 // import session from "express-session";
 // import authRoutes from "./routes/authRoutes.js";
 // import passport from "passport";
@@ -20,7 +19,6 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 const port = process.env.PORT || 5000;
 
 connectDb();
-// job.start();
 
 const app = express();
 
